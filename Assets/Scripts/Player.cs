@@ -18,7 +18,8 @@ public class Player : MonoBehaviour
     private SpriteRenderer spriteRenderer;
 
     private Animator animator;
-    private string CRAWL_ANIMATION = "isCrawling";
+    private readonly string crawlAnimation = "isCrawling";
+    private readonly string crawlAnimationSpeedMultiplier = "crawlMultiplier";
 
 
 
@@ -70,8 +71,13 @@ public class Player : MonoBehaviour
 
     void PlayerAnimation()
     {
-        if(movementX != 0 || movementY != 0) animator.SetBool(CRAWL_ANIMATION, true);
-        else animator.SetBool(CRAWL_ANIMATION, false);
+        if (movementX != 0 || movementY != 0)
+        {
+            animator.SetBool(crawlAnimation, true);
+            animator.SetFloat(crawlAnimationSpeedMultiplier, (moveSpeed * 0.2f));
+        }
+        else animator.SetBool(crawlAnimation, false);
+
     }
 
 }//class
