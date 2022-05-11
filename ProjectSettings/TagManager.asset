@@ -44,6 +44,12 @@ TagManager:
   - name: Flooring
     uniqueID: 2197456877
     locked: 0
+  - name: FlooringOverlay
+    uniqueID: 2953425511
+    locked: 0
+  - name: Objects
+    uniqueID: 2001852567
+    locked: 0
   - name: Players
     uniqueID: 2710655925
     locked: 0
