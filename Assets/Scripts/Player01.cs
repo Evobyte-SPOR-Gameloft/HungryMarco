@@ -10,6 +10,9 @@ public class Player01 : MonoBehaviour
     [SerializeField]
     private float rotationSpeed = 810f;
 
+    [SerializeField]
+    private float animationMultiplier = 0.2f;
+
     private float movementX;
     private float movementY;
 
@@ -74,7 +77,7 @@ public class Player01 : MonoBehaviour
         if (movementX != 0 || movementY != 0)
         {
             animator.SetBool(crawlAnimation, true);
-            animator.SetFloat(crawlAnimationSpeedMultiplier, (moveSpeed * 0.2f));
+            animator.SetFloat(crawlAnimationSpeedMultiplier, (moveSpeed * animationMultiplier));
         }
         else animator.SetBool(crawlAnimation, false);
 

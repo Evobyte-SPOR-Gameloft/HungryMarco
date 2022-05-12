@@ -258,8 +258,8 @@ TextureImporter:
         y: 240
         width: 16
         height: 16
-      alignment: 1
-      pivot: {x: 0, y: 1}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -272,7 +272,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextureAtlas_8
+      name: AntIdle01
       rect:
         serializedVersion: 2
         x: 128
@@ -293,7 +293,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextureAtlas_9
+      name: AntCrawl01
       rect:
         serializedVersion: 2
         x: 144
@@ -314,7 +314,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextureAtlas_10
+      name: AntCrawl02
       rect:
         serializedVersion: 2
         x: 160
@@ -482,7 +482,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextureAtlas_18
+      name: FlyCrawl02
       rect:
         serializedVersion: 2
         x: 112
@@ -1939,7 +1939,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1960,7 +1960,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1981,7 +1981,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2002,7 +2002,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2027,6 +2027,7 @@ TextureImporter:
     nameFileIdTable:
       Player01Idle03: -1784116649
       Grass03: -1919014740
+      FlyCrawl02: 501778989
       GrassOverlayCorner: -1827728528
       Player02Crawl02: 137049156
       GrassLeft: 1810009412
@@ -2041,7 +2042,6 @@ TextureImporter:
       GateEyes03: -1398156248
       Torch07: 733855302
       Player02Idle03: 1831740640
-      TextureAtlas_8: 2109722590
       GateEyes02: 784216690
       PowerUp01: 401339969
       OverlayGrassSide: 1665047917
@@ -2056,6 +2056,7 @@ TextureImporter:
       GateEyes04: -373900991
       Gate01: 880177783
       PowerUp04: 188641575
+      AntIdle01: 2109722590
       Player01Crawl01: -1566752432
       Torch08: 1375330431
       GrassCorner02: 1426896811
@@ -2079,10 +2080,10 @@ TextureImporter:
       OverlayGrassUpperRightCorner: -2141085155
       Pavement02: -1078162624
       Torch05: -321426742
-      TextureAtlas_10: -1875886068
       Player01Idle02: 1939221477
       GateEyes01: -2046768271
       GrassDown02: -383893550
+      AntCrawl02: -1875886068
       LarvaeCrawl01: -277491794
       Torch06: -1224534303
       Dirt01: 1139226791
@@ -2093,26 +2094,25 @@ TextureImporter:
       Gate06: 1196962577
       GrassCorner04: -1599399416
       Player02Idle02: -1309608383
+      AntCrawl01: 405366554
       Wall03: -465879303
       Flag01: 1222069453
       Grass02: 1218554805
-      TextureAtlas_9: 405366554
       Flowers01: 2089159700
-      PowerUp03: 491467800
       GrassUDown: 740386171
-      Wall01: -426559826
+      PowerUp03: 491467800
       GrassTop02: -277847405
+      Wall01: -426559826
+      Gate07: 1175582828
       PowerUp02: 1823139045
       GrassRight: -540251551
       DarkPavement01: -1118212396
-      Gate07: 1175582828
       Flag04: -284097270
       Torch03: -895724389
       GrassCorner03: 2106743121
       GrassDown01: -443639798
       Torch02: -2139849390
       Player02Idle01: 1090707381
-      TextureAtlas_18: 501778989
       LarvaeCrawl02: -579812082
       Flag03: 2076234461
       CornerWall01: -1951596885
