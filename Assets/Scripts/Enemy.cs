@@ -7,9 +7,6 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float rotationSpeed = 810f;
 
-    [SerializeField]
-    private float animationMultiplier = 0.2f;
-
     [HideInInspector]
     public float moveSpeed = 3.0f;
 
@@ -50,8 +47,8 @@ public class Enemy : MonoBehaviour
         {
             latestDirectionChangeTime = Time.time;
 
-            movementX = Random.Range(-1, 1);
-            movementY = Random.Range(-1, 1);
+            movementX = Random.Range(-1f, 1f);
+            movementY = Random.Range(-1f, 1f);
 
             movementDirection = new(movementX, movementY);
 

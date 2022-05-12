@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player02 : MonoBehaviour
+public class Player : MonoBehaviour
 {
     [SerializeField]
     private float moveSpeed = 3.0f;
@@ -10,10 +10,13 @@ public class Player02 : MonoBehaviour
     [SerializeField]
     private float rotationSpeed = 810f;
 
+    [SerializeField]
+    private float animationMultiplier = 0.2f;
+
     private float movementX;
     private float movementY;
 
-    //private Rigidbody2D playerBody;
+    private Rigidbody2D playerBody;
 
     //private SpriteRenderer spriteRenderer;
 
@@ -25,7 +28,7 @@ public class Player02 : MonoBehaviour
 
     void Awake()
     {
-        //playerBody = GetComponent<Rigidbody2D>();
+        playerBody = GetComponent<Rigidbody2D>();
 
         //spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -34,24 +37,25 @@ public class Player02 : MonoBehaviour
 
     //void Start()
     //{
-    //
+    //    
     //}
 
     void Update()
+    {
+        movementX = Input.GetAxisRaw("Horizontal");
+        movementY = Input.GetAxisRaw("Vertical");
+    }
+
+    void FixedUpdate()
     {
         PlayerMovement();
         PlayerAnimation();
     }
 
-    //void FixedUpdate()
-    //{
-    //
-    //}
-
     void PlayerMovement()
     {
-        movementX = Input.GetAxisRaw("Horizontal");
-        movementY = Input.GetAxisRaw("Vertical");
+        //movementX = Input.GetAxisRaw("Horizontal");
+        //movementY = Input.GetAxisRaw("Vertical");
 
         Vector2 movementDirection = new(movementX, movementY);
 
@@ -59,9 +63,10 @@ public class Player02 : MonoBehaviour
 
         movementDirection.Normalize();
 
-        transform.Translate(inputMagnitude * moveSpeed * Time.deltaTime * movementDirection, Space.World);
+        playerBody.transform.Translate(inputMagnitude * moveSpeed * Time.deltaTime * movementDirection, Space.World);
 
-        if (movementDirection != Vector2.zero)
+
+        if(movementDirection != Vector2.zero)
         {
             Quaternion toRotation = Quaternion.LookRotation(Vector3.forward, movementDirection);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
@@ -74,10 +79,11 @@ public class Player02 : MonoBehaviour
         if (movementX != 0 || movementY != 0)
         {
             animator.SetBool(crawlAnimation, true);
-            animator.SetFloat(crawlAnimationSpeedMultiplier, (moveSpeed * 0.2f));
+            animator.SetFloat(crawlAnimationSpeedMultiplier, (moveSpeed * animationMultiplier));
         }
         else animator.SetBool(crawlAnimation, false);
 
     }
 
 }//class
+
