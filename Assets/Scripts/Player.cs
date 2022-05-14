@@ -16,9 +16,8 @@ public class Player : MonoBehaviour
     private float movementX;
     private float movementY;
 
+    //private CharacterController controller;
     private Rigidbody2D playerBody;
-
-    //private SpriteRenderer spriteRenderer;
 
     private Animator animator;
     private readonly string crawlAnimation = "isCrawling";
@@ -28,17 +27,10 @@ public class Player : MonoBehaviour
 
     void Awake()
     {
+        //controller = GetComponent<CharacterController>();
         playerBody = GetComponent<Rigidbody2D>();
-
-        //spriteRenderer = GetComponent<SpriteRenderer>();
-
         animator = GetComponent<Animator>();
     }
-
-    //void Start()
-    //{
-    //    
-    //}
 
     void Update()
     {
@@ -54,19 +46,17 @@ public class Player : MonoBehaviour
 
     void PlayerMovement()
     {
-        //movementX = Input.GetAxisRaw("Horizontal");
-        //movementY = Input.GetAxisRaw("Vertical");
+        Vector2 move = new(movementX, movementY);
+
+        move.Normalize();
+
+        //controller.Move(moveSpeed * Time.deltaTime * move);
+
+        playerBody.MovePosition(playerBody.position + (move * moveSpeed * Time.fixedDeltaTime));
 
         Vector2 movementDirection = new(movementX, movementY);
 
-        float inputMagnitude = Mathf.Clamp01(movementDirection.magnitude);
-
-        movementDirection.Normalize();
-
-        playerBody.transform.Translate(inputMagnitude * moveSpeed * Time.deltaTime * movementDirection, Space.World);
-
-
-        if(movementDirection != Vector2.zero)
+        if (movementDirection != Vector2.zero)
         {
             Quaternion toRotation = Quaternion.LookRotation(Vector3.forward, movementDirection);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
