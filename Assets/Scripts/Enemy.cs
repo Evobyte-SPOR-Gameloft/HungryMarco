@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField]
-    private float moveSpeed = 3.0f;
+    [SerializeField] private float moveSpeed = 3.0f;
 
-    [SerializeField]
-    private float rotationSpeed = 810f;
+    [SerializeField] private float rotationSpeed = 810f;
 
     private GameObject referenceCollider;
     private BoxCollider2D allowedArea;
@@ -19,23 +17,18 @@ public class Enemy : MonoBehaviour
     private Vector2 position;
     private Vector2 target;
 
-    private void Awake()
+    private void Start()
     {
+        target = RandomPointInBounds(allowedArea.bounds);
+
         latestDirectionChangeTime = 0f;
 
         referenceCollider = GameObject.FindWithTag("AllowedArea");
 
-        if(referenceCollider != null)
+        if (referenceCollider != null)
         {
             allowedArea = referenceCollider.GetComponent<BoxCollider2D>();
         }
-    }
-    private void Start()
-    {
-        target = RandomPointInBounds(allowedArea.bounds);
-    }
-    private void Update()
-    {
     }
 
     void FixedUpdate()

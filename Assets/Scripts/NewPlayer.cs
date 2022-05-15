@@ -3,29 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// NOTE: The movement for this script uses the new InputSystem. The player needs to have a PlayerInput
-// component added and the Behaviour should be set to Send Messages so that the OnMove and OnFire methods
-// actually trigger
-
 public class NewPlayer : MonoBehaviour
 {
-    public float moveSpeed = 1f;
-    public float collisionOffset = 0.05f;
-    public ContactFilter2D movementFilter;
+    [SerializeField] private float moveSpeed = 3f;
+
+    [SerializeField] private float rotationSpeed = 810f;
+
+    [SerializeField] private float animationMultiplier = 0.2f;
+
+    [SerializeField] private float collisionOffset = 0.05f;
+
+    [SerializeField] private ContactFilter2D movementFilter;
 
     private Vector2 moveInput;
-    private List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
-    private Rigidbody2D rb;
+    private Rigidbody2D playerBody;
+
+    private Vector2 directionOfRotation;
+    private Animator animator;
+    private readonly string crawlAnimation = "isCrawling";
+    private readonly string crawlAnimationSpeedMultiplier = "crawlMultiplier";
+
+    private readonly List<RaycastHit2D> castCollisions = new();
+
+    private readonly string ENEMY_TAG = "Enemy";
 
     public void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        playerBody = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     public void FixedUpdate()
     {
-
-        // rb.MovePosition(rb.position + (moveInput * moveSpeed * Time.fixedDeltaTime));
+        // playerBody.MovePosition(playerBody.position + (moveInput * moveSpeed * Time.fixedDeltaTime));
 
 
         // Try to move player in input direction, followed by left right and up down input if failed
@@ -38,9 +48,21 @@ public class NewPlayer : MonoBehaviour
 
             if (!success)
             {
+                #pragma warning disable IDE0059 // Unnecessary assignment of a value
                 success = MovePlayer(new Vector2(0, moveInput.y));
+
             }
         }
+
+        directionOfRotation = new(moveInput.x, moveInput.y);
+
+        if (directionOfRotation != Vector2.zero)
+        {
+            Quaternion toRotation = Quaternion.LookRotation(Vector3.forward, directionOfRotation);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
+        }
+
+        PlayerAnimation();
 
     }
 
@@ -50,7 +72,7 @@ public class NewPlayer : MonoBehaviour
     public bool MovePlayer(Vector2 direction)
     {
         // Check for potential collisions
-        int count = rb.Cast(
+        int count = playerBody.Cast(
             direction, // X and Y values between -1 and 1 that represent the direction from the body to look for collisions
             movementFilter, // The settings that determine where a collision can occur on such as layers to collide with
             castCollisions, // List of collisions to store the found collisions into after the Cast is finished
@@ -58,10 +80,11 @@ public class NewPlayer : MonoBehaviour
 
         if (count == 0)
         {
-            Vector2 moveVector = direction * moveSpeed * Time.fixedDeltaTime;
+            Vector2 moveVector = moveSpeed * Time.fixedDeltaTime * direction;
 
             // No collisions
-            rb.MovePosition(rb.position + moveVector);
+            playerBody.MovePosition(playerBody.position + moveVector);
+
             return true;
         }
         else
@@ -76,6 +99,37 @@ public class NewPlayer : MonoBehaviour
         }
     }
 
+    void PlayerAnimation()
+    {
+        if (moveInput.x != 0 || moveInput.y != 0)
+        {
+            animator.SetBool(crawlAnimation, true);
+            animator.SetFloat(crawlAnimationSpeedMultiplier, (moveSpeed * animationMultiplier));
+        }
+        else animator.SetBool(crawlAnimation, false);
+
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag(ENEMY_TAG) && collision.gameObject.transform.localScale.magnitude < transform.localScale.magnitude)
+        {
+            //Debug.Log("Enemy SMALLER than player Scale");
+
+            transform.localScale += collision.gameObject.transform.localScale / 100; //Adds 1/100 of the enemy scale to the player's scale
+
+            Destroy(collision.gameObject); //Destroys enemy
+        }
+
+        if (collision.gameObject.CompareTag(ENEMY_TAG) && collision.gameObject.transform.localScale.magnitude > transform.localScale.magnitude)
+        {
+            //Debug.Log("Enemy BIGGER than Player");
+
+            Destroy(gameObject); //Destroys player
+
+        }
+    }
+
     public void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
@@ -83,6 +137,7 @@ public class NewPlayer : MonoBehaviour
 
     public void OnFire()
     {
-        print("Shots fired");
+        print("Pew Pew...");
     }
-}
+
+}//class

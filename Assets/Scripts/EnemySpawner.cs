@@ -4,28 +4,22 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject[] enemyReference;
+    [SerializeField] private GameObject[] enemyReference;
 
-    [SerializeField]
-    private Transform gatePosition;
+    [SerializeField] private Transform gatePosition;
 
-    [HideInInspector]
-    public int enemiesOnMap = 0;
+    [SerializeField] private float minEnemyScaleAddition = 0.9f;
+
+    [SerializeField] private float maxEnemyScaleAddition = 13.0f;
+
+    [SerializeField] private float enemyScaleBias = 7.0f;
+
+    [HideInInspector] public int enemiesOnMap = 0;
 
     private int randomIndex;
     private float enemyRandomScaleAddition;
 
     private GameObject spawnedEnemy;
-
-    [SerializeField]
-    private float minEnemyScaleAddition = 0.5f;
-
-    [SerializeField]
-    private float maxEnemyScaleAddition = 7.0f;
-
-    [SerializeField]
-    private float enemyScaleBias = 10.0f;
 
     void Start()
     {

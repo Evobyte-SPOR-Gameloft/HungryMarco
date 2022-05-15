@@ -47258,11 +47258,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b358cf50ab21ff4dbf865784d764521, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &523661149 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5365981800307529424, guid: 63403e1141c540842ace19ffc6d63cad, type: 3}
-  m_PrefabInstance: {fileID: 5365981800129568734}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &554652104 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3473780461144397578, guid: b175fc924920bd84d9d1c4d09e4cde58, type: 3}
@@ -52513,34 +52508,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5365981800307529421, guid: 63403e1141c540842ace19ffc6d63cad, type: 3}
   m_PrefabInstance: {fileID: 5365981800129568734}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1030064404
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 523661149}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28ddb46a4aff7954d9097785ffe73b0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 1
-  collisionOffset: 0.05
-  movementFilter:
-    useTriggers: 0
-    useLayerMask: 0
-    useDepth: 0
-    useOutsideDepth: 0
-    useNormalAngle: 0
-    useOutsideNormalAngle: 0
-    layerMask:
-      serializedVersion: 2
-      m_Bits: 0
-    minDepth: 0
-    maxDepth: 0
-    minNormalAngle: 0
-    maxNormalAngle: 0
 --- !u!1001 &1031613158
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -52595,6 +52562,10 @@ PrefabInstance:
     - target: {fileID: 8216352310166632062, guid: 9bc480c2c90982e41a84d5d9ae4af170, type: 3}
       propertyPath: m_Name
       value: Player02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8216352310166632062, guid: 9bc480c2c90982e41a84d5d9ae4af170, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bc480c2c90982e41a84d5d9ae4af170, type: 3}
@@ -82315,6 +82286,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1844388447}
     m_Modifications:
+    - target: {fileID: 1089866351, guid: 63403e1141c540842ace19ffc6d63cad, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5365981800307529421, guid: 63403e1141c540842ace19ffc6d63cad, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -82362,14 +82337,6 @@ PrefabInstance:
     - target: {fileID: 5365981800307529424, guid: 63403e1141c540842ace19ffc6d63cad, type: 3}
       propertyPath: m_Name
       value: Player01
-      objectReference: {fileID: 0}
-    - target: {fileID: 6824796149830241725, guid: 63403e1141c540842ace19ffc6d63cad, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6824796149830241725, guid: 63403e1141c540842ace19ffc6d63cad, type: 3}
-      propertyPath: m_DefaultControlScheme
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 63403e1141c540842ace19ffc6d63cad, type: 3}

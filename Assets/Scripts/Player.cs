@@ -4,14 +4,11 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField]
-    private float moveSpeed = 3.0f;
+    [SerializeField] private float moveSpeed = 3.0f;
 
-    [SerializeField]
-    private float rotationSpeed = 810f;
+    [SerializeField] private float rotationSpeed = 810f;
 
-    [SerializeField]
-    private float animationMultiplier = 0.2f;
+    [SerializeField] private float animationMultiplier = 0.2f;
 
     private float movementX;
     private float movementY;
@@ -52,7 +49,7 @@ public class Player : MonoBehaviour
 
         //controller.Move(moveSpeed * Time.deltaTime * move);
 
-        playerBody.MovePosition(playerBody.position + (move * moveSpeed * Time.fixedDeltaTime));
+        playerBody.MovePosition(playerBody.position + (moveSpeed * Time.fixedDeltaTime * move));
 
         Vector2 movementDirection = new(movementX, movementY);
 
