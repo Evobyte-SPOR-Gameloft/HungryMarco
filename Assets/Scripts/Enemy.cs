@@ -19,7 +19,6 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        target = RandomPointInBounds(allowedArea.bounds);
 
         latestDirectionChangeTime = 0f;
 
@@ -29,6 +28,8 @@ public class Enemy : MonoBehaviour
         {
             allowedArea = referenceCollider.GetComponent<BoxCollider2D>();
         }
+
+        target = RandomPointInBounds(allowedArea.bounds);
     }
 
     void FixedUpdate()
