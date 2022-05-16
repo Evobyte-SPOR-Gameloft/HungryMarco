@@ -15,6 +15,8 @@ public class NewPlayer : MonoBehaviour
 
     [SerializeField] private ContactFilter2D movementFilter;
 
+    public static NewPlayer instance;
+
     private Vector2 moveInput;
     private Rigidbody2D playerBody;
 
@@ -27,8 +29,11 @@ public class NewPlayer : MonoBehaviour
 
     private readonly string ENEMY_TAG = "Enemy";
 
+    [HideInInspector] public int killCount = 0;
+
     public void Start()
     {
+        instance = this;
         playerBody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
@@ -118,6 +123,7 @@ public class NewPlayer : MonoBehaviour
 
             transform.localScale += collision.gameObject.transform.localScale / 100; //Adds 1/100 of the enemy scale to the player's scale
 
+            killCount++;
             Destroy(collision.gameObject); //Destroys enemy
         }
 

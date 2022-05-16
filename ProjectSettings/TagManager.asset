@@ -6,6 +6,8 @@ TagManager:
   tags:
   - AllowedArea
   - Enemy
+  - Timer
+  - Score
   layers:
   - Default
   - TransparentFX

@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
         {
             //Debug.Log(CharIndex);
             Instantiate(players[CharIndex]);
+            TimerController.instance.BeginTimer();
         }
     }
 
