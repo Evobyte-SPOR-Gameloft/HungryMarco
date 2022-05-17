@@ -18,43 +18,49 @@ public class TimerController : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
-    }
-    void Start()
-    {
-        timeCounter.text = "00:00:00";
-        timerGoing = false;
+        if(instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        instance.timeCounter.text = "00:00:00";
+        instance.timerGoing = false;
+
     }
 
     public void BeginTimer()
     {
-        timerGoing = true;
-        elapsedTime = 0f;
+        instance.timerGoing = true;
+        instance.elapsedTime = 0f;
 
         StartCoroutine(UpdateTimer());
     }
 
     public void EndTimer()
     {
-        timerGoing = false;
+        instance.timerGoing = false;
     }
 
     private IEnumerator UpdateTimer()
     {
-        while (timerGoing)
+        while (instance.timerGoing)
         {
 
-            elapsedTime += Time.deltaTime;
+            instance.elapsedTime += 1;
 
-            timePlaying = TimeSpan.FromSeconds(elapsedTime);
+            instance.timePlaying = TimeSpan.FromSeconds(instance.elapsedTime);
 
-            string timePlayingStr = timePlaying.ToString("hh':'mm':'ss");
+            string timePlayingStr = instance.timePlaying.ToString("hh':'mm':'ss");
 
-            timeCounter.text = timePlayingStr;
+            instance.timeCounter.text = timePlayingStr;
 
             Debug.Log(timePlayingStr);
 
-            yield return null;
+            yield return new WaitForSeconds(1);
         }
     }
 
