@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Timer
   - Score
+  - GameOverScreen
   layers:
   - Default
   - TransparentFX

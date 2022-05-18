@@ -9,12 +9,14 @@ public class TimerController : MonoBehaviour
 
     public static TimerController instance;
 
-    public Text timeCounter;
+    [SerializeField] private Text timeCounter;
 
     private TimeSpan timePlaying;
     private bool timerGoing;
 
     private float elapsedTime;
+
+    public string timePlayingStr;
 
     private void Awake()
     {
@@ -48,7 +50,7 @@ public class TimerController : MonoBehaviour
 
             instance.timePlaying = TimeSpan.FromSeconds(instance.elapsedTime);
 
-            string timePlayingStr = instance.timePlaying.ToString("hh':'mm':'ss");
+            timePlayingStr = instance.timePlaying.ToString("hh':'mm':'ss");
 
             instance.timeCounter.text = timePlayingStr;
 

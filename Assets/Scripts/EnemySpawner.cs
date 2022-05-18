@@ -28,20 +28,22 @@ public class EnemySpawner : MonoBehaviour
 
     IEnumerator SpawnEnemies()
     {
-        while (enemiesOnMap < 999)
-        {
-            yield return new WaitForSeconds(Random.Range(0.1f, 1.0f));
+        if (GameObject.FindWithTag("Player") != null) {
+            while (enemiesOnMap < 999 && NewPlayer.instance.playerDead == false)
+            {
+                yield return new WaitForSeconds(Random.Range(0.1f, 1.0f));
 
-            randomIndex = Random.Range(0, enemyReference.Length);
+                randomIndex = Random.Range(0, enemyReference.Length);
 
-            spawnedEnemy = Instantiate(enemyReference[randomIndex]);
-            enemiesOnMap++;
+                spawnedEnemy = Instantiate(enemyReference[randomIndex]);
+                enemiesOnMap++;
 
-            spawnedEnemy.transform.position = gatePosition.position;
+                spawnedEnemy.transform.position = gatePosition.position;
 
-            enemyRandomScaleAddition = BiasedRandom(minEnemyScaleAddition, maxEnemyScaleAddition, enemyScaleBias);
+                enemyRandomScaleAddition = BiasedRandom(minEnemyScaleAddition, maxEnemyScaleAddition, enemyScaleBias);
 
-            spawnedEnemy.transform.localScale += new Vector3(enemyRandomScaleAddition, enemyRandomScaleAddition, 0f);
+                spawnedEnemy.transform.localScale += new Vector3(enemyRandomScaleAddition, enemyRandomScaleAddition, 0f);
+            }
         }
     }
 

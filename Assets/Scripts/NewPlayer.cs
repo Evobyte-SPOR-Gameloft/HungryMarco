@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class NewPlayer : MonoBehaviour
 {
@@ -32,9 +33,12 @@ public class NewPlayer : MonoBehaviour
     private readonly string ENEMY_TAG = "Enemy";
 
     [HideInInspector] public int killCount = 0;
+    [HideInInspector] public bool playerDead;
 
     private bool canMove;
     private bool canTrigger;
+
+    private GameObject gameOverScreen;
 
     private void Awake()
     {
@@ -42,6 +46,10 @@ public class NewPlayer : MonoBehaviour
 
         canMove = true;
         canTrigger = true;
+
+        playerDead = false;
+
+        gameOverScreen = FindInActiveObjectByTag("GameOverScreen");
     }
     public void Start()
     {
@@ -156,6 +164,10 @@ public class NewPlayer : MonoBehaviour
 
                 TimerController.instance.EndTimer();
 
+                if (gameOverScreen != null) gameOverScreen.SetActive(true);
+
+                playerDead = true;
+
                 spriteRenderer.enabled = false;
                 canMove = false;
                 canTrigger = false;
@@ -168,6 +180,23 @@ public class NewPlayer : MonoBehaviour
     {
         soundEffect.clip = Resources.Load<AudioClip>("Audioclips/" + filename);
         soundEffect.Play(delay);
+    }
+
+    GameObject FindInActiveObjectByTag(string tag)
+    {
+
+        Transform[] objs = Resources.FindObjectsOfTypeAll<Transform>() as Transform[];
+        for (int i = 0; i < objs.Length; i++)
+        {
+            if (objs[i].hideFlags == HideFlags.None)
+            {
+                if (objs[i].CompareTag(tag))
+                {
+                    return objs[i].gameObject;
+                }
+            }
+        }
+        return null;
     }
 
     public void OnMove(InputValue value)

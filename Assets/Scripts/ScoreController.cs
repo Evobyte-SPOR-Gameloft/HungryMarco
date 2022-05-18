@@ -27,7 +27,7 @@ public class ScoreController : MonoBehaviour
 
     public void UpdateScore()
     {
-        scoreCounter.text = $"x{NewPlayer.instance.killCount}";
+        if (GameObject.FindWithTag("Player") != null) scoreCounter.text = $"x{NewPlayer.instance.killCount}";
     }
 
 }//clas

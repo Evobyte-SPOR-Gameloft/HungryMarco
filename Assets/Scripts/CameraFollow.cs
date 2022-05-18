@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraFollow : MonoBehaviour
 {
@@ -8,14 +9,33 @@ public class CameraFollow : MonoBehaviour
 
     private Vector3 tempPos;
 
+    private Camera zoomCamera;
+
+    [SerializeField] private float zoomScrollSpeed = 10f;
+    [SerializeField] private float maxZoom = 8f;
+    [SerializeField] private float minZoom = 1f;
+
     void Start()
     {
-        player = GameObject.FindWithTag("Player").transform;
+        if(GameObject.FindWithTag("Player") != null) player = GameObject.FindWithTag("Player").transform;
+
+        zoomCamera = Camera.main;
+    }
+
+    private void Update()
+    {
+        //Zoom in and out with scroll wheel
+        zoomCamera.orthographicSize -= Input.GetAxis("Mouse ScrollWheel") * zoomScrollSpeed;
+        zoomCamera.orthographicSize = Mathf.Clamp(zoomCamera.orthographicSize, minZoom, maxZoom);
     }
 
 
-
     void LateUpdate()
+    {
+        FollowPlayer();
+    }
+
+    private void FollowPlayer()
     {
         tempPos = transform.position;
 
@@ -27,7 +47,6 @@ public class CameraFollow : MonoBehaviour
 
         transform.position = tempPos;
     }
-
 
 
 }//class
