@@ -18,17 +18,12 @@ public class TimerController : MonoBehaviour
 
     private void Awake()
     {
-        if(instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+
+        instance = this;
+
         instance.timeCounter.text = "00:00:00";
         instance.timerGoing = false;
+
     }
 
     public void BeginTimer()

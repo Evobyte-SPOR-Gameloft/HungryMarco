@@ -19,6 +19,8 @@ public class NewPlayer : MonoBehaviour
 
     private Vector2 moveInput;
     private Rigidbody2D playerBody;
+    private AudioSource soundEffect;
+    private SpriteRenderer spriteRenderer;
 
     private Vector2 directionOfRotation;
     private Animator animator;
@@ -31,28 +33,22 @@ public class NewPlayer : MonoBehaviour
 
     [HideInInspector] public int killCount = 0;
 
-    public delegate void PlayerDied();
-    public event PlayerDied PlayerDiedInfo;
-
-    public delegate void PlayerAte();
-    public event PlayerAte PlayerAteInfo;
+    private bool canMove;
+    private bool canTrigger;
 
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        instance = this;
+
+        canMove = true;
+        canTrigger = true;
     }
     public void Start()
     {
         playerBody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        soundEffect = GetComponent<AudioSource>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     public void FixedUpdate()
@@ -93,32 +89,37 @@ public class NewPlayer : MonoBehaviour
     // Returns true or false depending on if a move was executed
     public bool MovePlayer(Vector2 direction)
     {
-        // Check for potential collisions
-        int count = playerBody.Cast(
-            direction, // X and Y values between -1 and 1 that represent the direction from the body to look for collisions
-            movementFilter, // The settings that determine where a collision can occur on such as layers to collide with
-            castCollisions, // List of collisions to store the found collisions into after the Cast is finished
-            moveSpeed * Time.fixedDeltaTime + collisionOffset); // The amount to cast equal to the movement plus an offset
-
-        if (count == 0)
+        if (canMove)
         {
-            Vector2 moveVector = moveSpeed * Time.fixedDeltaTime * direction;
+            // Check for potential collisions
+            int count = playerBody.Cast(
+                direction, // X and Y values between -1 and 1 that represent the direction from the body to look for collisions
+                movementFilter, // The settings that determine where a collision can occur on such as layers to collide with
+                castCollisions, // List of collisions to store the found collisions into after the Cast is finished
+                moveSpeed * Time.fixedDeltaTime + collisionOffset); // The amount to cast equal to the movement plus an offset
 
-            // No collisions
-            playerBody.MovePosition(playerBody.position + moveVector);
-
-            return true;
-        }
-        else
-        {
-            // Print collisions
-            foreach (RaycastHit2D hit in castCollisions)
+            if (count == 0)
             {
-                print(hit.ToString());
+                Vector2 moveVector = moveSpeed * Time.fixedDeltaTime * direction;
+
+                // No collisions
+                playerBody.MovePosition(playerBody.position + moveVector);
+
+                return true;
+            }
+            else
+            {
+                // Print collisions
+                foreach (RaycastHit2D hit in castCollisions)
+                {
+                    print(hit.ToString());
+                }
+
+                return false;
             }
 
-            return false;
         }
+        else return false;
     }
 
     void PlayerAnimation()
@@ -134,31 +135,39 @@ public class NewPlayer : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag(ENEMY_TAG) && collision.gameObject.transform.localScale.magnitude < transform.localScale.magnitude)
+        if (canTrigger)
         {
-            //Debug.Log("Enemy SMALLER than Player");
+            if (collision.gameObject.CompareTag(ENEMY_TAG) && collision.gameObject.transform.localScale.magnitude < transform.localScale.magnitude)
+            {
+                //Debug.Log("Enemy SMALLER than Player");
 
-            transform.localScale += collision.gameObject.transform.localScale / 100; //Adds 1/100 of the enemy scale to the player's scale
+                transform.localScale += collision.gameObject.transform.localScale / 100; //Adds 1/100 of the enemy scale to the player's scale
 
-            killCount++;
+                killCount++;
+                PlayAudio("crunchSound", 0);
+                Destroy(collision.gameObject); //Destroys enemy
+            }
 
-            Debug.Log(PlayerAteInfo);
-            instance.PlayerAteInfo?.Invoke();
+            if (collision.gameObject.CompareTag(ENEMY_TAG) && collision.gameObject.transform.localScale.magnitude > transform.localScale.magnitude)
+            {
+                //Debug.Log("Enemy BIGGER than Player");
 
-            Destroy(collision.gameObject); //Destroys enemy
+                PlayAudio("deathSound", 0);
+
+                TimerController.instance.EndTimer();
+
+                spriteRenderer.enabled = false;
+                canMove = false;
+                canTrigger = false;
+            }
         }
+    }
 
-        if (collision.gameObject.CompareTag(ENEMY_TAG) && collision.gameObject.transform.localScale.magnitude > transform.localScale.magnitude)
-        {
-            //Debug.Log("Enemy BIGGER than Player");
-            TimerController.instance.EndTimer();
-
-            Debug.Log(PlayerDiedInfo);
-            instance.PlayerDiedInfo?.Invoke();
-
-            Destroy(gameObject); //Destroys player
-
-        }
+    //To be removed when switching to events and delegates for sound
+    void PlayAudio(string filename, ulong delay)
+    {
+        soundEffect.clip = Resources.Load<AudioClip>("Audioclips/" + filename);
+        soundEffect.Play(delay);
     }
 
     public void OnMove(InputValue value)
