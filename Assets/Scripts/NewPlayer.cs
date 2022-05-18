@@ -19,7 +19,6 @@ public class NewPlayer : MonoBehaviour
 
     private Vector2 moveInput;
     private Rigidbody2D playerBody;
-    private AudioSource soundEffect; //To be removed when switching to events and delegates for sound
 
     private Vector2 directionOfRotation;
     private Animator animator;
@@ -32,12 +31,25 @@ public class NewPlayer : MonoBehaviour
 
     [HideInInspector] public int killCount = 0;
 
+    public delegate void PlayerDied();
+    public event PlayerDied PlayerDiedInfo;
+
+    public delegate void PlayerAte();
+    public event PlayerAte PlayerAteInfo;
+
     public void Start()
     {
-        instance = this;
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
         playerBody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        soundEffect = GetComponent<AudioSource>();//To be removed when switching to events and delegates for sound
     }
 
     public void FixedUpdate()
@@ -126,24 +138,24 @@ public class NewPlayer : MonoBehaviour
             transform.localScale += collision.gameObject.transform.localScale / 100; //Adds 1/100 of the enemy scale to the player's scale
 
             killCount++;
-            PlayAudio("crunchSound", 0); //To be removed when switching to events and delegates for sound
+
+            Debug.Log(PlayerAteInfo);
+            instance.PlayerAteInfo?.Invoke();
+
             Destroy(collision.gameObject); //Destroys enemy
         }
 
         if (collision.gameObject.CompareTag(ENEMY_TAG) && collision.gameObject.transform.localScale.magnitude > transform.localScale.magnitude)
         {
             //Debug.Log("Enemy BIGGER than Player");
-            PlayAudio("deathSound", 0); //Useless since player id destroyed, to be removed when switching to events and delegates for sound
+            TimerController.instance.EndTimer();
+
+            Debug.Log(PlayerDiedInfo);
+            instance.PlayerDiedInfo?.Invoke();
+
             Destroy(gameObject); //Destroys player
 
         }
-    }
-
-    //To be removed when switching to events and delegates for sound
-    void PlayAudio(string filename, ulong delay)
-    {
-        soundEffect.clip = Resources.Load<AudioClip>("Audioclips/" + filename);
-        soundEffect.Play(delay);
     }
 
     public void OnMove(InputValue value)

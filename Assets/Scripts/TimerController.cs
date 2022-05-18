@@ -29,7 +29,6 @@ public class TimerController : MonoBehaviour
         }
         instance.timeCounter.text = "00:00:00";
         instance.timerGoing = false;
-
     }
 
     public void BeginTimer()
@@ -58,7 +57,7 @@ public class TimerController : MonoBehaviour
 
             instance.timeCounter.text = timePlayingStr;
 
-            Debug.Log(timePlayingStr);
+            //Debug.Log(timePlayingStr);
 
             yield return new WaitForSeconds(1);
         }

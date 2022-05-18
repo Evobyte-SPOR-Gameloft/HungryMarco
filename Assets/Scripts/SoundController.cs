@@ -8,17 +8,27 @@ public class SoundController : MonoBehaviour
     void Start()
     {
         soundEffect = GetComponent<AudioSource>();
-    }
 
-    void Update()
-    {
-        
+        NewPlayer.instance.PlayerDiedInfo += PlayerDiedListener;
+        NewPlayer.instance.PlayerDiedInfo += PlayerAteListener;
     }
 
     void PlayAudio(string filename)
     {
         soundEffect.clip = Resources.Load<AudioClip>("Audioclips/" + filename);
         soundEffect.Play();
+    }
+
+    void PlayerDiedListener()
+    {
+        Debug.Log("Death event called");
+        PlayAudio("deathSound");
+    }
+
+    void PlayerAteListener()
+    {
+        Debug.Log("Ate enemy event called");
+        PlayAudio("crunchSound");
     }
 
 }//class
