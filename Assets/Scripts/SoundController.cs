@@ -10,7 +10,7 @@ public class SoundController : MonoBehaviour
         soundEffect = GetComponent<AudioSource>();
 
         NewPlayer.instance.PlayerDiedInfo += PlayerDiedListener;
-        NewPlayer.instance.PlayerDiedInfo += PlayerAteListener;
+        NewPlayer.instance.PlayerAteInfo += PlayerAteListener;
     }
 
     void PlayAudio(string filename)

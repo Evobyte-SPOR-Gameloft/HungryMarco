@@ -37,7 +37,7 @@ public class NewPlayer : MonoBehaviour
     public delegate void PlayerAte();
     public event PlayerAte PlayerAteInfo;
 
-    public void Start()
+    private void Awake()
     {
         if (instance == null)
         {
@@ -48,6 +48,9 @@ public class NewPlayer : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+    public void Start()
+    {
         playerBody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
