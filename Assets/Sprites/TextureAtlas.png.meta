@@ -2014,6 +2014,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: SkullIcon
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 192
+        width: 16
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd7e225ec7d1d124da9fc031ecd42fac
+      internalID: 204938455
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BetterSkull
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 192
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff61c7ba4bb9b3c48b6e59bf8b775995
+      internalID: 1291246079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -2047,6 +2089,7 @@ TextureImporter:
       OverlayGrassSide: 1665047917
       Gate08: -1656715686
       Gate04: 1641297603
+      SkullIcon: 204938455
       Gate02: 44205716
       Flag02: -223796483
       Rocks02: 624374661
@@ -2083,6 +2126,7 @@ TextureImporter:
       Player01Idle02: 1939221477
       GateEyes01: -2046768271
       GrassDown02: -383893550
+      BetterSkull: 1291246079
       AntCrawl02: -1875886068
       LarvaeCrawl01: -277491794
       Torch06: -1224534303

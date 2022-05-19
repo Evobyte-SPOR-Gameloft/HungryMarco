@@ -11,7 +11,7 @@ public class CameraFollow : MonoBehaviour
 
     private Camera zoomCamera;
 
-    [SerializeField] private float zoomScrollSpeed = 10f;
+    [SerializeField] private float zoomScrollSpeed = 1f;
     [SerializeField] private float maxZoom = 8f;
     [SerializeField] private float minZoom = 1f;
 

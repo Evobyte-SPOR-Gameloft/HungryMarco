@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
@@ -17,24 +18,35 @@ public class Enemy : MonoBehaviour
     private Vector2 position;
     private Vector2 target;
 
-    private void Start()
+    private GameObject canvasChildObject;
+    private GameObject imageChildObject;
+
+    private Image imageChild;
+
+    private Vector3 originalSkullPosition;
+    private Quaternion originalSkullRotation;
+
+    private GameObject playerObject;
+    private Color skullColor;
+
+
+    private void Awake()
     {
+        SetInvisibleSkullOnEnemies();
 
-        latestDirectionChangeTime = 0f;
+        GetSkullIconPosition();
 
-        referenceCollider = GameObject.FindWithTag("AllowedArea");
-
-        if (referenceCollider != null)
-        {
-            allowedArea = referenceCollider.GetComponent<BoxCollider2D>();
-        }
-
-        target = RandomPointInBounds(allowedArea.bounds);
+        SelectPointToMoveTo();
     }
 
     void FixedUpdate()
     {
         EnemyMovement();
+
+        canvasChildObject.transform.localPosition = originalSkullPosition;
+        canvasChildObject.transform.rotation = originalSkullRotation;
+
+        ChangeSkullVisibility();
     }
 
     void EnemyMovement()
@@ -61,11 +73,62 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public static Vector2 RandomPointInBounds(Bounds bounds)
+    private static Vector2 RandomPointInBounds(Bounds bounds)
     {
         return new Vector2(
             Random.Range(bounds.min.x, bounds.max.x),
             Random.Range(bounds.min.y, bounds.max.y));
+    }
+
+    private void SelectPointToMoveTo()
+    {
+        latestDirectionChangeTime = 0f;
+
+        referenceCollider = GameObject.FindWithTag("AllowedArea");
+
+        if (referenceCollider != null)
+        {
+            allowedArea = referenceCollider.GetComponent<BoxCollider2D>();
+        }
+
+        target = RandomPointInBounds(allowedArea.bounds);
+    }
+
+    private void SetInvisibleSkullOnEnemies()
+    {
+        canvasChildObject = this.transform.GetChild(0).gameObject;
+        imageChildObject = canvasChildObject.transform.GetChild(0).gameObject;
+
+        imageChild = imageChildObject.GetComponent<Image>();
+
+        skullColor = imageChild.color;
+        skullColor.a = 0f;
+        imageChild.color = skullColor;
+    }
+
+    private void ChangeSkullVisibility()
+    {
+        if (GameObject.FindWithTag("Player") != null)
+        {
+            playerObject = GameObject.FindWithTag("Player");
+
+            if (transform.localScale.magnitude > playerObject.transform.localScale.magnitude)
+            {
+                skullColor.a = 1f;
+                imageChild.color = skullColor;
+            }
+            else
+            {
+                skullColor.a = 0f;
+                imageChild.color = skullColor;
+            }
+        }
+    }
+
+    private void GetSkullIconPosition()
+    {
+        originalSkullPosition = canvasChildObject.transform.localPosition;
+        originalSkullRotation = canvasChildObject.transform.rotation;
     }
 
 }//class

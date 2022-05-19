@@ -31,6 +31,7 @@ public class NewPlayer : MonoBehaviour
     private readonly List<RaycastHit2D> castCollisions = new();
 
     private readonly string ENEMY_TAG = "Enemy";
+    private readonly string POWERUP_TAG = "PowerUp";
 
     [HideInInspector] public int killCount = 0;
     [HideInInspector] public bool playerDead;
@@ -145,32 +146,40 @@ public class NewPlayer : MonoBehaviour
     {
         if (canTrigger)
         {
-            if (collision.gameObject.CompareTag(ENEMY_TAG) && collision.gameObject.transform.localScale.magnitude < transform.localScale.magnitude)
+            if (collision.gameObject.CompareTag(ENEMY_TAG))
             {
-                //Debug.Log("Enemy SMALLER than Player");
+                if (collision.gameObject.transform.localScale.magnitude < transform.localScale.magnitude)
+                {
+                    //Debug.Log("Enemy SMALLER than Player");
 
-                transform.localScale += collision.gameObject.transform.localScale / 100; //Adds 1/100 of the enemy scale to the player's scale
+                    transform.localScale += collision.gameObject.transform.localScale / 100; //Adds 1/100 of the enemy scale to the player's scale
 
-                killCount++;
-                PlayAudio("crunchSound", 0);
-                Destroy(collision.gameObject); //Destroys enemy
+                    killCount++;
+                    PlayAudio("crunchSound", 0);
+                    Destroy(collision.gameObject); //Destroys enemy
+                }
+
+                if (collision.gameObject.transform.localScale.magnitude > transform.localScale.magnitude)
+                {
+                    //Debug.Log("Enemy BIGGER than Player");
+
+                    PlayAudio("deathSound", 0);
+
+                    TimerController.instance.EndTimer();
+
+                    if (gameOverScreen != null) gameOverScreen.SetActive(true);
+
+                    playerDead = true;
+
+                    spriteRenderer.enabled = false;
+                    canMove = false;
+                    canTrigger = false;
+                }
             }
-
-            if (collision.gameObject.CompareTag(ENEMY_TAG) && collision.gameObject.transform.localScale.magnitude > transform.localScale.magnitude)
+            if (collision.gameObject.CompareTag(POWERUP_TAG))
             {
-                //Debug.Log("Enemy BIGGER than Player");
-
-                PlayAudio("deathSound", 0);
-
-                TimerController.instance.EndTimer();
-
-                if (gameOverScreen != null) gameOverScreen.SetActive(true);
-
-                playerDead = true;
-
-                spriteRenderer.enabled = false;
-                canMove = false;
-                canTrigger = false;
+                PlayAudio("powerUp", 0);
+                Destroy(collision.gameObject);
             }
         }
     }

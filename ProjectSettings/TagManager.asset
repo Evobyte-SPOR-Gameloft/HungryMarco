@@ -9,6 +9,7 @@ TagManager:
   - Timer
   - Score
   - GameOverScreen
+  - PowerUp
   layers:
   - Default
   - TransparentFX

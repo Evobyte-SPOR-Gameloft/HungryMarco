@@ -26,13 +26,11 @@ public class EnemySpawner : MonoBehaviour
         StartCoroutine(SpawnEnemies());
     }
 
-    IEnumerator SpawnEnemies()
+    private IEnumerator SpawnEnemies()
     {
         if (GameObject.FindWithTag("Player") != null) {
             while (enemiesOnMap < 999 && NewPlayer.instance.playerDead == false)
             {
-                yield return new WaitForSeconds(Random.Range(0.1f, 1.0f));
-
                 randomIndex = Random.Range(0, enemyReference.Length);
 
                 spawnedEnemy = Instantiate(enemyReference[randomIndex]);
@@ -43,6 +41,8 @@ public class EnemySpawner : MonoBehaviour
                 enemyRandomScaleAddition = BiasedRandom(minEnemyScaleAddition, maxEnemyScaleAddition, enemyScaleBias);
 
                 spawnedEnemy.transform.localScale += new Vector3(enemyRandomScaleAddition, enemyRandomScaleAddition, 0f);
+
+                yield return new WaitForSeconds(Random.Range(0.1f, 1.0f));
             }
         }
     }
