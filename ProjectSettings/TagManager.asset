@@ -10,6 +10,9 @@ TagManager:
   - Score
   - GameOverScreen
   - PowerUp
+  - GameplayCanvas
+  - FxTemporaire
+  - DeathParticles
   layers:
   - Default
   - TransparentFX
@@ -17,7 +20,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Particles
   - 
   - 
   - 

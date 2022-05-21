@@ -39,10 +39,30 @@ public class NewPlayer : MonoBehaviour
     private bool canMove;
     private bool canTrigger;
 
+    private bool shieldActive;
+
+    [SerializeField] private GameObject particlesReference;
+    private GameObject spawnedDeathParticles;
+
     private GameObject gameOverScreen;
+
+    private GameObject canvasChildObject;
+    private GameObject imageChildObject;
+
+    private Image imageChild;
+
+    private Vector3 originalShieldPosition;
+    private Quaternion originalShieldRotation;
+
+    private Color shieldColor;
 
     private void Awake()
     {
+        playerBody = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        soundEffect = GetComponent<AudioSource>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
         instance = this;
 
         canMove = true;
@@ -50,14 +70,14 @@ public class NewPlayer : MonoBehaviour
 
         playerDead = false;
 
+        shieldActive = false;
+
         gameOverScreen = FindInActiveObjectByTag("GameOverScreen");
-    }
-    public void Start()
-    {
-        playerBody = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
-        soundEffect = GetComponent<AudioSource>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        SetInvisibleShieldOnPlayer();
+
+        GetShieldIconPosition();
+
     }
 
     public void FixedUpdate()
@@ -90,6 +110,11 @@ public class NewPlayer : MonoBehaviour
         }
 
         PlayerAnimation();
+
+        canvasChildObject.transform.localPosition = originalShieldPosition;
+        canvasChildObject.transform.rotation = originalShieldRotation;
+
+        ChangeShieldVisibility();
 
     }
 
@@ -153,38 +178,89 @@ public class NewPlayer : MonoBehaviour
                     //Debug.Log("Enemy SMALLER than Player");
 
                     transform.localScale += collision.gameObject.transform.localScale / 100; //Adds 1/100 of the enemy scale to the player's scale
-
                     killCount++;
                     PlayAudio("crunchSound", 0);
+
+                    spawnedDeathParticles = Instantiate(particlesReference);
+                    spawnedDeathParticles.transform.position = collision.gameObject.transform.position;
+
                     Destroy(collision.gameObject); //Destroys enemy
+
+                    Destroy(spawnedDeathParticles, 2f); //Destroys particles after 2 seconds;
                 }
 
                 if (collision.gameObject.transform.localScale.magnitude > transform.localScale.magnitude)
                 {
                     //Debug.Log("Enemy BIGGER than Player");
+                    if (shieldActive == true)
+                    {
+                        PlayAudio("shieldBreak", 0);
+                        shieldActive = false;
+                    }
+                    else
+                    {
+                        PlayAudio("deathSound", 0);
 
-                    PlayAudio("deathSound", 0);
+                        TimerController.instance.EndTimer();
 
-                    TimerController.instance.EndTimer();
+                        if (gameOverScreen != null) gameOverScreen.SetActive(true);
 
-                    if (gameOverScreen != null) gameOverScreen.SetActive(true);
+                        playerDead = true;
 
-                    playerDead = true;
-
-                    spriteRenderer.enabled = false;
-                    canMove = false;
-                    canTrigger = false;
+                        spriteRenderer.enabled = false;
+                        canMove = false;
+                        canTrigger = false;
+                    }
                 }
             }
             if (collision.gameObject.CompareTag(POWERUP_TAG))
             {
                 PlayAudio("powerUp", 0);
-                Destroy(collision.gameObject);
+
+                switch (collision.gameObject.name)
+                {
+                    case "PowerUp01(Clone)":
+                        Debug.Log("Picked Up Bloody Whirl");
+                        Enemy.isBloodyWhirlActive = true;
+                        Destroy(collision.gameObject);
+                        Invoke(nameof(SetBoolFalse), 0.8f);
+                        break;
+                    case "PowerUp02(Clone)":
+                        Debug.Log("Picked Up Boost+++");
+                        if (moveSpeed < 5.2f) moveSpeed += 1.8f;
+                        else moveSpeed = 7f;
+                        Destroy(collision.gameObject);
+                        break;
+                    case "PowerUp03(Clone)":
+                        Debug.Log("Picked Up Boost++");
+                        if (moveSpeed < 5.8f) moveSpeed += 1.2f;
+                        else moveSpeed = 7f;
+                        Destroy(collision.gameObject);
+                        break;
+                    case "PowerUp04(Clone)":
+                        Debug.Log("Picked Up Boost+");
+                        if (moveSpeed < 6.3f) moveSpeed += 0.7f;
+                        else moveSpeed = 7f;
+                        Destroy(collision.gameObject);
+                        break;
+                    case "PowerUp05(Clone)":
+                        Debug.Log("Picked Up Beetle Shell");
+                        shieldActive = true;
+                        Destroy(collision.gameObject);
+                        break;
+                    case "PowerUp06(Clone)":
+                        Debug.Log("Picked Up Oblivion Rose");
+                        killCount += 50;
+                        Destroy(collision.gameObject);
+                        break;
+                    default:
+                        Debug.Log("How did this happen!?");
+                        break;
+                }
             }
         }
     }
 
-    //To be removed when switching to events and delegates for sound
     void PlayAudio(string filename, ulong delay)
     {
         soundEffect.clip = Resources.Load<AudioClip>("Audioclips/" + filename);
@@ -206,6 +282,43 @@ public class NewPlayer : MonoBehaviour
             }
         }
         return null;
+    }
+
+    private void SetInvisibleShieldOnPlayer()
+    {
+        canvasChildObject = this.transform.GetChild(0).gameObject;
+        imageChildObject = canvasChildObject.transform.GetChild(0).gameObject;
+
+        imageChild = imageChildObject.GetComponent<Image>();
+
+        shieldColor = imageChild.color;
+        shieldColor.a = 0f;
+        imageChild.color = shieldColor;
+    }
+
+    private void GetShieldIconPosition()
+    {
+        originalShieldPosition = canvasChildObject.transform.localPosition;
+        originalShieldRotation = canvasChildObject.transform.rotation;
+    }
+
+    private void ChangeShieldVisibility()
+    {
+        if (shieldActive == true)
+        {
+            shieldColor.a = 1f;
+            imageChild.color = shieldColor;
+        }
+        else
+        {
+            shieldColor.a = 0f;
+            imageChild.color = shieldColor;
+        }
+    }
+
+    private void SetBoolFalse()
+    {
+        Enemy.isBloodyWhirlActive = false;
     }
 
     public void OnMove(InputValue value)

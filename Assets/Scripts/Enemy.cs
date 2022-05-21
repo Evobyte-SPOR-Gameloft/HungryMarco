@@ -29,9 +29,15 @@ public class Enemy : MonoBehaviour
     private GameObject playerObject;
     private Color skullColor;
 
+    public static bool isBloodyWhirlActive = false;
+
+    private Renderer enemyRenderer;
+
 
     private void Awake()
     {
+        enemyRenderer = GetComponent<Renderer>();
+
         SetInvisibleSkullOnEnemies();
 
         GetSkullIconPosition();
@@ -47,6 +53,10 @@ public class Enemy : MonoBehaviour
         canvasChildObject.transform.rotation = originalSkullRotation;
 
         ChangeSkullVisibility();
+
+        MoveTowardsPlayerIfPowerUpActive();
+
+        Invoke(nameof(SelfDestruct), 30f);
     }
 
     void EnemyMovement()
@@ -129,6 +139,25 @@ public class Enemy : MonoBehaviour
     {
         originalSkullPosition = canvasChildObject.transform.localPosition;
         originalSkullRotation = canvasChildObject.transform.rotation;
+    }
+
+    void MoveTowardsPlayerIfPowerUpActive()
+    {
+
+        if (isBloodyWhirlActive == true)
+        {
+            if (transform.localScale.magnitude < playerObject.transform.localScale.magnitude)
+            {
+                transform.position = Vector3.Lerp(this.transform.position, playerObject.transform.position, 10f * Time.deltaTime);
+            }
+        }
+
+    }
+
+    void SelfDestruct()
+    {
+        if(enemyRenderer.isVisible == false)
+        Destroy(gameObject);
     }
 
 }//class

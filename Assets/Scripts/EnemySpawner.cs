@@ -17,18 +17,26 @@ public class EnemySpawner : MonoBehaviour
     [HideInInspector] public int enemiesOnMap = 0;
 
     private int randomIndex;
-    private float enemyRandomScaleAddition;
 
     private GameObject spawnedEnemy;
 
+    private GameObject playerObject;
+
+    private void Awake()
+    {
+    }
     void Start()
     {
+        playerObject = GameObject.FindWithTag("Player");
+
         StartCoroutine(SpawnEnemies());
     }
 
     private IEnumerator SpawnEnemies()
     {
-        if (GameObject.FindWithTag("Player") != null) {
+        Debug.Log(playerObject);
+
+        if (playerObject != null) {
             while (enemiesOnMap < 999 && NewPlayer.instance.playerDead == false)
             {
                 randomIndex = Random.Range(0, enemyReference.Length);
@@ -38,24 +46,37 @@ public class EnemySpawner : MonoBehaviour
 
                 spawnedEnemy.transform.position = gatePosition.position;
 
-                enemyRandomScaleAddition = BiasedRandom(minEnemyScaleAddition, maxEnemyScaleAddition, enemyScaleBias);
-
-                spawnedEnemy.transform.localScale += new Vector3(enemyRandomScaleAddition, enemyRandomScaleAddition, 0f);
+                Debug.Log("Reached floats");
+                float randomPlus = Random.Range(0.7f, 1.6f);
+                float randomMinus = Random.Range(-0.2f, -0.8f);
+                Debug.Log(CoinFlip());
+                switch (CoinFlip())
+                {
+                    case "Sideways":
+                        spawnedEnemy.transform.localScale = playerObject.transform.localScale + new Vector3(3f, 3f, 0f);
+                        break;
+                    case "Heads":
+                        spawnedEnemy.transform.localScale = playerObject.transform.localScale + new Vector3(randomPlus, randomPlus, 0f);
+                        break;
+                    case "Tails":
+                        spawnedEnemy.transform.localScale = playerObject.transform.localScale + new Vector3(randomMinus, randomMinus, 0f);
+                        break;
+                    default:
+                        Debug.Log("Something went wrong!");
+                        break;
+                }
 
                 yield return new WaitForSeconds(Random.Range(0.1f, 1.0f));
             }
         }
     }
 
-    //bias < 1 => biased towards higher values
-    //bias > 1 => biased towards lower values
-    float BiasedRandom(float low, float high, float bias)
+    private string CoinFlip()
     {
-        float x = Random.Range(0.1f, 0.9f);
-
-        x = Mathf.Pow(x, bias);
-
-        return low + (high - low) * x;
+        float random = Random.value;
+        if (random > 0.98f) return "Sideways";
+        else if (random > 0.49f) return "Heads";
+        else return "Tails";
     }
 
 }//class

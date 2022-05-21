@@ -37,13 +37,11 @@ public class PowerUpSpawner : MonoBehaviour
         {
             while (NewPlayer.instance.playerDead == false)
             {
-                Debug.Log("Attempt to spawn PowerUp");
 
                 chance = Random.value;
 
-                Debug.Log(chance > 0.9);
 
-                if (chance > 0.9)
+                if (chance > 0.9f)
                 {
                     target = RandomPointInBounds(allowedArea.bounds);
 
